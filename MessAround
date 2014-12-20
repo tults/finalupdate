@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Green Wood</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+      .images{
+        width: 90px;
+        height: 90px;
+      }
+
+    </style>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+    <script>
+
+
+    $(document).ready(function(){
+
+       $.getJSON('http://cooper-union-instagram-proxy.herokuapp.com/search/tag/greenwoodcemetery', function(response){
+      
+          console.log(response);
+          var img = [];
+          for(var i=0; i<response.length; i++) {
+                  img.push(response[i].images);
+                  var gravesite = img;
+              };
+
+                 console.log(gravesite);
+
+                 instagramMarkers(photos);
+
+                 drawMap(gravesite);
+
+         var mapOptions = {
+          zoom: 17,
+          center: new google.maps.LatLng(40.652842, -73.987517)
+        }; 
+
+      var positions = [];
+
+        for(var i=0; i<response.length; i++) {
+          if(response[i].location !==null) {
+            var latitude=response[i].location.latitude;
+            var longitude = response[i].location.longitude;
+          if (response[i].location.name!==null){
+            var name = response[i].location.name;
+          } else {
+            var name = response[i].caption.text;
+          };
+
+        positions.push(
+        {
+          'title':response[i].caption.text,
+          'map':new google.maps.LatLng(latitude, longitude),
+          'name': name,
+          'link': response[i].link,
+          'icon': {
+              "url": response[i].images.thumbnail.url,
+              "size": new google.maps.Size(50, 50),
+              "origin": new google.maps.Point(20,20)
+          }
+
+        });
+
+        };
+      };
+        
+
+        }); //end JSON
+
+
+
+      });//end ready func
+
+ //test
+    // $(function () {
+   
+    
+   
+
+
+    </script>
+  </head>
+  <body>
+       <div id="map-canvas"></div>
+  </body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Green Wood</title>
+
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+
+      <script type="text/javascript"></script>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+            <script>
+              $(document).ready(function(){
+
+               // var map; not copied
+
+
+
+      //START OF DRAW FUNCTION
+
+      var draw = function(id, mapOptions, positions) {
+
+      var map = new google.maps.Map(document.getElementById(id), mapOptions);
+
+      var myLatlng = new google.maps.LatLng(40.7293, -73.9906);
+
+      //set up some empty arrays to use
+      var markers = [];
+      var infoWindows = [];
+      var popUps = [];
+
+      //create all of the markers on the map
+      for (i in positions) {
+
+      // Adding a marker to the map
+        markers[i] = new google.maps.Marker({
+          position: positions[i].map,
+          map: map,
+          title: positions[i].title,
+          icon: positions[i].icon, //url to images
+          animation: positions[i].animation
+          });
+        
+      }
+
+       //loop through the markers, and add pop-up windows to them for links
+       for (i in markers) {
+
+    //START OF INSTAGRAM AND MAP ACTUAL CODE
+      var trend = []; 
+
+      $(document).ready(function(){
+
+
+        $.getJSON("http://cooper-union-instagram-proxy.herokuapp.com/search/tag/greenwoodcemetery", function(response){
+
+          console.log(response);
+          var img = [];
+          for(var i=0; i<response.length; i++) {
+            img.push(response[i].images.thumbnail.url);
+            var gravesite=img;
+          }
+
+          console.log(gravesite);
+
+
+        var drawMap = function(data) {
+          var mapOptions = {
+          zoom: 17,
+          center: new google.maps.LatLng(40.65, -73.98) 
+          };
+         // var positions = [];
+
+
+            for(var i=0; i<response.length; i++) {
+              if(response[i].location != null) {
+                var latitude = response[i].location.latitude;
+                var longitude = response[i].location.longitude;
+                if(response[i].location.name!= null){
+                  var name = response[i].location.name;
+                } else{
+                  var name  = response[i].caption.text;
+                };
+
+                positions.push(
+                {
+                  'title':response[i].caption.text,
+                  'map': new google.maps.LatLng(latitude, longitude),
+                  'name': name,
+                  'link': response[i].link, // link to instagram post
+                  'icon': {   // make it an object rather than just a URL so can edit size.
+                      "url": response[i].images.thumbnail.url,
+                      "size": new google.maps.Size(50,50),
+                      "origin": new google.maps.Point(20,20) // sets so image more centered
+                          },
+                  'animation': google.maps.Animation.DROP,
+                });
+                 
+              };
+            };
+            // 
+            // Counting how many instagram posts since December 7th, the date matched with Twitter. Manipulating "created_time"
+            var counting = 0
+            for(var i=0; i<response.length; i++){
+              if( (Number(response[i].created_time)) >1417913800){
+                counting += 1
+              }
+            };
+            console.log("This is " + counting);
+            trend.push(['Instagramcracker', counting]); // number of posts with tag nyctheater since December 7th
+
+            // Start Twitter GetJson
+
+            $.getJSON("http://cooper-union-search-proxy.herokuapp.com/twitter/search/nyctheater?since_id=539467092236308470&count=50 ", function(response){
+              console.log(response.statuses.length);
+              var tickerentries = [];
+              for(var i=0; i<response.statuses.length; i++){
+                tickerentries.push(response.statuses[i].text);
+               
+              };
+                  var combo = "<ul id= 'ticker'>";
+                  for(var i=0; i<tickerentries.length; i++){
+                  combo = combo + "<li><span>" + tickerentries[i] + "</span></li>";
+                  };
+                  combo = combo + "</ul>";
+                  $("body").append(combo);
+                  $("body").append("<img class = 'img' src = 'twittertheater.png' />")
+
+               var ticker = function()
+                {
+                    setTimeout(function(){
+                        $('#ticker li:first').animate( {marginTop: '-140px'}, 800, function()
+                        {
+                            $(this).detach().appendTo('ul#ticker').removeAttr('style');
+                        });
+                        ticker();
+                    }, 5000); // amount of time per post, 4.1 sec.
+                };
+                ticker();
+
+               trend.push(['Twitter', tickerentries.length]);
+               console.log(trend);
+               drawChart(trend);
+          draw('map', mapOptions, positions);  
+        };
+        }); // closes twitter getJSON
+       }); //closes instagram getJSON
+
+     }); //closes readyfunction
+    
+    //END OF INSTAGRAM AND MAP
+
+
+
+
+
+
+
+              })//end doc ready func.
+
+            </script>
+    </head>
+</html>
