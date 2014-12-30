@@ -140,27 +140,8 @@
         }
       ]
 
-        var instagramMarkers = function(photos) {
-            var markers = [];
-            var locations = [];
-            var markerOptions = [];
-
-        //creates a marker that can be applied to all photos in array
-        for(var i=0; i<photos.length; i++) {
-          locations[i] = new google.maps.LatLng(photos[i].lat, photos[i].lon);
-          markerOptions[i] = {
-            position: locations[i],
-            map: map,
-            title: photos[i].title,
-            icon: photos[i].image
-          };
-
-          markers[i] = new google.maps.Marker(markerOptions[i]);
-        }
-
-         instagramMarkers(photos);
-
-      }
+       
+    
 
     });//close instagram JSON, seems like info in here cannot be accessed after this point
 
@@ -258,20 +239,45 @@
 
           //test instagram imgs
           
-    //        var marker = new google.maps.Marker(instagram1MarkerOptions);
+
+           var instagramMarkers = function(photos) {
+            var markers = [];
+            var locations = [];
+            var markerOptions = [];
+
+        //creates a marker that can be applied to all photos in array
+        for(var i=0; i<photos.length; i++) {
+          locations[i] = new google.maps.LatLng(photos[i].lat, photos[i].lon);
+          markerOptions[i] = {
+            position: locations[i],
+            map: map,
+            title: photos[i].title,
+            icon: photos[i].image
+          };
+
+          markers[i] = new google.maps.Marker(markerOptions[i]);
+        }
+
+         instagramMarkers(photos);
+
+       }
+
+
+          //old stuff i wrote
+         //   var marker = new google.maps.Marker(instagram1MarkerOptions);
        
-    //      var Instagram1 = new google.maps.LatLng(40.653596, -73.995999);
-    //       var instagram1MarkerOptions = {
-    //           position: Instagram1,
-    //           map: map,
-    //           title:"Visitor Pics",
-    //           icon: gravesite[0], 
+         // var Instagram1 = new google.maps.LatLng(40.653596, -73.995999);
+         //  var instagram1MarkerOptions = {
+         //      position: Instagram1,
+         //      map: map,
+         //      title:"Visitor Pics",
+         //      icon: gravesite[0], 
 
-       //can't get "gravesite" to link to array of image urls from instagram
+      // can't get "gravesite" to link to array of image urls from instagram
 
-    //       };
+        //  };
 
-    // var instagram1Marker = new google.maps.Marker(instagram1MarkerOptions)
+    //var instagram1Marker = new google.maps.Marker(instagram1MarkerOptions)
 
       //example below of what the page is intended to display by referencing urls from instagram API and placing them on map
 var marker = new google.maps.Marker(instagram2MarkerOptions);
