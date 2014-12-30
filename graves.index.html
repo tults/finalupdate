@@ -28,29 +28,125 @@
 
 
       //sample photo object
-      var photos = [
+      // var photos = [
+      //   {
+      //     "lat":1234,
+      //     "lon":2345,
+      //     "title":"photo title",
+      //     "image":"http://photo url"
+      //   },
+      //   {
+      //     "lat":1234,
+      //     "lon":2345,
+      //     "title":"photo title",
+      //     "image":"http://photo url"
+      //   }
+      // ]
+
+
+      // var instagramMarkers = function(photos) {
+      //   var markers = [];
+      //   var locations = [];
+      //   var markerOptions = [];
+
+      //   for(var i=0; i<photos.length; i++) {
+
+      //     locations[i] = new google.maps.LatLng(photos[i].lat, photos[i].lon);
+      //     markerOptions[i] = {
+      //       position: locations[i],
+      //       map: map,
+      //       title: photos[i].title,
+      //       icon: photos[i].image
+      //     };
+
+      //     markers[i] = new google.maps.Marker(markerOptions[i]);
+      //   }
+
+      // }
+
+
+      $.getJSON('http://cooper-union-instagram-proxy.herokuapp.com/search/tag/greenwoodcemetery', function(response){  
+
+      //begin instagram JSON
+      
+          console.log(response);//generates array of objects that are recent instagram posts
+          var img = [];
+          for(var i=0; i<response.length; i++) {
+                  img.push(response[i].images.thumbnail.url);
+                  var gravesite = img;
+          };
+          console.log(gravesite);//generates array of picture urls on instagram
+
+          //instagramMarkers(photos);
+
+          drawMap(gravesite);
+
+     var photos = [ 
         {
-          "lat":1234,
-          "lon":2345,
-          "title":"photo title",
-          "image":"http://photo url"
+          "lat":40.652855, 
+          "lon":-73.993740,
+          "title":"visitor Pics",
+          "image":gravesite[0] //references array named gravesite
         },
         {
-          "lat":1234,
-          "lon":2345,
-          "title":"photo title",
-          "image":"http://photo url"
+          "lat":40.652477, 
+          "lon":-73.999899,
+          "title":"Visitor Pics",
+          "image":gravesite[1]
+        },
+        {
+          "lat":40.652855, 
+          "lon":-73.993740,
+          "title":"visitor Pics",
+          "image":gravesite[2]
+        },
+        {
+          "lat":40.653458,  
+          "lon":-73.999212,
+          "title":"visitor Pics",
+          "image":gravesite[3]
+        },
+        {
+          "lat":40.654654,  
+          "lon":-73.995790,
+          "title":"visitor Pics",
+          "image":gravesite[4]
+        },
+        {
+          "lat":40.652054,  
+          "lon":-73.996530,
+          "title":"visitor Pics",
+          "image":gravesite[5]
+        },{
+          "lat":40.650711,  
+          "lon":-73.995704,
+          "title":"visitor Pics",
+          "image":gravesite[6]
+        },{
+          "lat":40.656482, 
+          "lon":-73.994802,
+          "title":"visitor Pics",
+          "image":gravesite[7]
+        },{
+          "lat":40.657565,  
+          "lon": -73.991315,
+          "title":"visitor Pics",
+          "image":gravesite[8]
+        },{
+          "lat":40.657972, 
+          "lon":-73.988612,
+          "title":"visitor Pics",
+          "image":gravesite[9]
         }
       ]
 
+        var instagramMarkers = function(photos) {
+            var markers = [];
+            var locations = [];
+            var markerOptions = [];
 
-      var instagramMarkers = function(photos) {
-        var markers = [];
-        var locations = [];
-        var markerOptions = [];
-
+        //creates a marker that can be applied to all photos in array
         for(var i=0; i<photos.length; i++) {
-
           locations[i] = new google.maps.LatLng(photos[i].lat, photos[i].lon);
           markerOptions[i] = {
             position: locations[i],
@@ -62,46 +158,30 @@
           markers[i] = new google.maps.Marker(markerOptions[i]);
         }
 
+         instagramMarkers(photos);
+
       }
 
-
-
-      $.getJSON('http://cooper-union-instagram-proxy.herokuapp.com/search/tag/greenwoodcemetery', function(response){
-      
-          console.log(response);
-          var img = [];
-          for(var i=0; i<response.length; i++) {
-                  img.push(response[i].images.thumbnail.url);
-                  var gravesite = img;
-          }
-          console.log(gravesite);
-
-          instagramMarkers(photos);
-
-          drawMap(gravesite) //not a func at this location, move after drawMaps var is stated below
-
-    //  });//end of JSON moved to end of markers so gravesite can be accessed around line 190.  Map is not displayed when this is moved though
+    });//close instagram JSON, seems like info in here cannot be accessed after this point
 
     
       // var drawMap = function(data) {
       //   console.log(data);
       // }
-          
+
 
       var drawMap = function(data) {
         var mapOptions = {
-          zoom: 17,
+          zoom: 16,
           center: new google.maps.LatLng(40.652842, -73.987517)
         }; 
-
-        // drawMap(gravesite); //moved from above, will hopefully act as func here
 
         var map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
 
         var myLatlng = new google.maps.LatLng(40.652842, -73.987517);
         
-        
+        //Peter Cooper
           var position = new google.maps.LatLng(40.652842, -73.987517);
 
           var markerOptions = {
@@ -111,10 +191,11 @@
               icon: 'pcooper.png'
           };
 
-          
+          // To add the marker to the map, use the 'map' property
           var marker = new google.maps.Marker(markerOptions);
         
-          var entrancePosition = new google.maps.LatLng(40.658115, -73.994606); 
+        //Green Wood Entrance
+          var entrancePosition = new google.maps.LatLng(40.658115, -73.994606); //needs to be position for var??
           
           var entranceMarkerOptions = {
               position: entrancePosition,
@@ -125,10 +206,9 @@
 
           var entranceMarker = new google.maps.Marker(entranceMarkerOptions);
 
-
           
       var marker = new google.maps.Marker(hgeorgeMarkerOptions);
-        
+        //HGeorge
          var HGeorge = new google.maps.LatLng(40.652755, -73.983924);
           var hgeorgeMarkerOptions = {
               position: HGeorge,
@@ -151,9 +231,9 @@
           };
          
        var aduryeeMarker = new google.maps.Marker(aduryeeMarkerOptions);
- 
+   
       var marker = new google.maps.Marker(hchadwickMarkerOptions);
-       
+      
          var HChadwick = new google.maps.LatLng(40.657720, -73.986290);
           var hchadwickMarkerOptions = {
               position: HChadwick,
@@ -163,7 +243,7 @@
           };
         
        var hchadwickMarker = new google.maps.Marker(hchadwickMarkerOptions); 
-   
+     
       var marker = new google.maps.Marker(cebbetsMarkerOptions);
         
          var CEbbets = new google.maps.LatLng(40.652755,  -73.986291);
@@ -175,83 +255,81 @@
           };
 
         var cebbetsMarker = new google.maps.Marker(cebbetsMarkerOptions)
-       
+
           //test instagram imgs
-
-       
           
-      var marker = new google.maps.Marker(instagram1MarkerOptions);
-        
-         var Instagram1 = new google.maps.LatLng(40.653596, -73.995999);
-          var instagram1MarkerOptions = {
-              position: Instagram1,
-              map: map,
-              title:"Visitor Pics",
-              icon: gravesite[0],
+    //        var marker = new google.maps.Marker(instagram1MarkerOptions);
+       
+    //      var Instagram1 = new google.maps.LatLng(40.653596, -73.995999);
+    //       var instagram1MarkerOptions = {
+    //           position: Instagram1,
+    //           map: map,
+    //           title:"Visitor Pics",
+    //           icon: gravesite[0], 
 
-          };
+       //can't get "gravesite" to link to array of image urls from instagram
 
+    //       };
 
+    // var instagram1Marker = new google.maps.Marker(instagram1MarkerOptions)
 
-        var instagram1Marker = new google.maps.Marker(instagram1MarkerOptions)
-
-    var marker = new google.maps.Marker(instagram2MarkerOptions);
-        
-         var Instagram2 = new google.maps.LatLng(40.655834, -73.989422);
+      //example below of what the page is intended to display by referencing urls from instagram API and placing them on map
+var marker = new google.maps.Marker(instagram2MarkerOptions);
+        //starbucks
+         var Instagram2 = new google.maps.LatLng(40.652855, 
+          -73.993740);
           var instagram2MarkerOptions = {
               position: Instagram2,
               map: map,
               title:"Visitor Pics",
-              icon: gravesite[1] 
+              icon: 'http://scontent-b.cdninstagram.com/hphotos-xfp1/t51.2885-15/891520_759422167468775_1166122898_s.jpg',
 
           };
 
         var instagram2Marker = new google.maps.Marker(instagram2MarkerOptions)
 
-        // var marker = new google.maps.Marker(instagram3MarkerOptions);
-        // //starbucks
-        //  var Instagram3 = new google.maps.LatLng(40.653474, -73.993843);
-        //   var instagram3MarkerOptions = {
-        //       position: Instagram3,
-        //       map: map,
-        //       title:"Visitor Pics",
-        //       icon: 'gravesite[2]',
+        var marker = new google.maps.Marker(instagram3MarkerOptions);
+       
+         var Instagram3 = new google.maps.LatLng(40.648924, -73.992217);
+          var instagram3MarkerOptions = {
+              position: Instagram3,
+              map: map,
+              title:"Visitor Pics",
+              icon: "http://scontent-b.cdninstagram.com/hphotos-xaf1/t51.2885-15/10852968_985968931436848_720908832_s.jpg",
 
-        //   };
+          };
 
-        // var instagram3Marker = new google.maps.Marker(instagram3MarkerOptions)
+        var instagram3Marker = new google.maps.Marker(instagram3MarkerOptions)
 
-        // var marker = new google.maps.Marker(instagram4MarkerOptions);
-        // //starbucks
-        //  var Instagram4 = new google.maps.LatLng(40.653148, -73.982921);
-        //   var instagram4MarkerOptions = {
-        //       position: Instagram4,
-        //       map: map,
-        //       title:"Visitor Pics",
-        //       icon: gravesite[3],
-
-        //   };
-
-        // var instagram4Marker = new google.maps.Marker(instagram4MarkerOptions)
-
-        // var marker = new google.maps.Marker(instagram5MarkerOptions);
-        // //starbucks
-        //  var Instagram5 = new google.maps.LatLng(40.650201, -73.992920);
-        //   var instagram5MarkerOptions = {
-        //       position: Instagram5,
-        //       map: map,
-        //       title:"Visitor Pics",
-        //       icon: gravesite[4],
-
-        //   };
-
-        // var instagram5Marker = new google.maps.Marker(instagram5MarkerOptions)
+        var marker = new google.maps.Marker(instagram4MarkerOptions);
         
-    }//end draw map
-   }); //end jquery
-  }); //end of doc ready func?S
+         var Instagram4 = new google.maps.LatLng(40.657972,-73.988612);
+          var instagram4MarkerOptions = {
+              position: Instagram4,
+              map: map,
+              title:"Visitor Pics",
+              icon: "http://scontent-a.cdninstagram.com/hphotos-xaf1/t5…885-15/10865115_1580477768848786_1970098485_s.jpg",
 
-    
+          };
+
+        var instagram4Marker = new google.maps.Marker(instagram4MarkerOptions)
+
+        var marker = new google.maps.Marker(instagram5MarkerOptions);
+       
+         var Instagram5 = new google.maps.LatLng(40.650711,-73.995704);
+          var instagram5MarkerOptions = {
+              position: Instagram5,
+              map: map,
+              title:"Visitor Pics",
+              icon: "http://scontent-b.cdninstagram.com/hphotos-xfa1/t5…885-15/10818113_1594977287399203_1684750874_s.jpg",
+
+          };
+
+        var instagram5Marker = new google.maps.Marker(instagram5MarkerOptions)
+  
+      }//end draw map
+    }); //end jquery
+ 
    
 
 
